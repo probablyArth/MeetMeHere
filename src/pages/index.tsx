@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession, getSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { useDeleteUser } from "~/hooks/user";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -29,7 +29,7 @@ export default Home;
 
 const AuthShowcase: React.FC = () => {
   let { data: sessionData } = useSession();
-  const deleteUser = useDeleteUser();
+  const router = useRouter();
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
     { enabled: sessionData?.user !== undefined }
@@ -40,20 +40,22 @@ const AuthShowcase: React.FC = () => {
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
+      {sessionData && (
+        <button
+          className="rounded-full bg-black px-10 py-3 font-semibold text-white no-underline transition hover:bg-gray-900"
+          onClick={() => {
+            router.push("/dashboard");
+          }}
+        >
+          Head Over to Dashbaord {"->"}
+        </button>
+      )}
       <button
         className="rounded-full bg-black px-10 py-3 font-semibold text-white no-underline transition hover:bg-gray-900"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
-      {sessionData && (
-        <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-          onClick={deleteUser}
-        >
-          Delete Account
-        </button>
-      )}
     </>
   );
 };
