@@ -10,3 +10,7 @@
     -moz-appearance: textfield !important;
   }
 }
+
+* {
+  box-sizing: border-box;
+}

@@ -5,9 +5,8 @@ import ProfileMenu from "./ProfileMenu";
 const Header: FC = () => {
   const { data } = useSession();
   const [profileMenuClicked, setProfileMenuClicked] = useState<boolean>(false);
-
   return (
-    <div className="sticky top-2 m-2 flex w-[95%] items-center justify-between rounded-md p-4 shadow-md">
+    <div className="sticky top-2 m-2 flex max-h-[20vw] w-[95%] items-center justify-between rounded-md p-4 shadow-md">
       <h1>MeetMeHere</h1>
       <div className="relative">
         <button
