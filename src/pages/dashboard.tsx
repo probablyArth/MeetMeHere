@@ -18,11 +18,13 @@ const Dashboard: NextPage = () => {
   const [currentTab, setCurrentTab] = useState<tab>(0);
 
   return (
-    <main className="relative flex h-screen w-screen flex-col items-center ">
+    <main className="relative flex h-screen w-screen flex-col items-center justify-center overflow-x-hidden">
       <Header />
-      <div className="relative flex h-full w-full gap-4">
+      <div className="relative flex h-full w-full gap-4 p-4">
         <SideMenu setCurrentTab={setCurrentTab} />
-        <div>{tabs[currentTab]}</div>
+        <div className="flex h-full w-full flex-col items-center rounded-md px-2 shadow-md">
+          {tabs[currentTab]}
+        </div>
       </div>
     </main>
   );

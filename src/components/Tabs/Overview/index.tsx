@@ -1,5 +1,9 @@
 import { FC } from "react";
 
-const OverviewTab: FC = () => <h1>Overview tab</h1>;
+const OverviewTab: FC = () => (
+  <>
+    <button>Create a new meeting</button>
+  </>
+);
 
 export default OverviewTab;

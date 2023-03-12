@@ -21,11 +21,11 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
 
   return (
     <div
-      className={`sticky top-0 left-0 z-40 flex h-full max-h-[800px] bg-transparent duration-300 ease-in-out `}
+      className={`absolute top-0 left-0 z-40 flex h-full max-h-[800px] bg-transparent duration-300 ease-in-out md:sticky md:max-h-full`}
     >
       <div
         className={`relative w-[300px] rounded-md shadow-md transition-all ${
-          !showSidebar && "-ml-[300px]"
+          !showSidebar && "-ml-[300px] md:-ml-0"
         }`}
       >
         <ul className="flex h-full flex-col items-center justify-center gap-4">
@@ -56,7 +56,7 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
         onClick={() => {
           setShowSidebar((show) => !show);
         }}
-        className="absolute right-[-50px] top-[50%]"
+        className="absolute right-[-50px] top-[50%] md:hidden"
       >
         <AiFillRightSquare size={"50px"} />
       </button>
