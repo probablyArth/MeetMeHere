@@ -54,6 +54,23 @@ model User {
   rate          Int?
 }
 
+model Meeting {
+  id String @id @default(cuid())
+  title String
+  description String
+  duration DateTime
+  invitees Invitee[]
+}
+
+model Invitee {
+  id String @id @default(cuid())
+  meetingId String
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  gmail String
+  
+  @@index([meetingId])
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
