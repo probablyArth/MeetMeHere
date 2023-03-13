@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { prisma } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
   getRate: protectedProcedure.query(async (req) => {
-    return prisma.user
+    return req.ctx.prisma.user
       .findUnique({
         where: {
           id: req.ctx.session.user.id,
@@ -13,14 +12,14 @@ export const userRouter = createTRPCRouter({
       .then((res) => res?.rate);
   }),
   delete: protectedProcedure.mutation(async (req) => {
-    return prisma.user.delete({
+    return req.ctx.prisma.user.delete({
       where: {
         id: req.ctx.session.user.id,
       },
     });
   }),
   addRate: protectedProcedure.input(z.number()).mutation((req) => {
-    return prisma.user.update({
+    return req.ctx.prisma.user.update({
       where: { id: req.ctx.session.user.id },
       data: {
         rate: req.input,

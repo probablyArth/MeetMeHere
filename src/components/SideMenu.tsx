@@ -1,7 +1,8 @@
 import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 import { AiFillRightSquare } from "react-icons/ai";
-import { tab } from "~/pages/dashboard";
+import { tab } from "~/components/Layouts/AppShell";
 import Button from "./Common/Button";
+import { useRouter } from "next/router";
 
 const SideMenuButton: FC<{ children: ReactNode; onClick: () => void }> = ({
   children,
@@ -16,6 +17,7 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
   setCurrentTab,
 }) => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const router = useRouter();
 
   return (
     <div
@@ -30,6 +32,7 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
           <SideMenuButton
             onClick={() => {
               setCurrentTab(0);
+              router.push("/dashboard");
             }}
           >
             Overview
@@ -37,6 +40,7 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
           <SideMenuButton
             onClick={() => {
               setCurrentTab(1);
+              router.push("/previousMeetings");
             }}
           >
             Previous Meetings
@@ -44,6 +48,7 @@ const SideMenu: FC<{ setCurrentTab: Dispatch<SetStateAction<tab>> }> = ({
           <SideMenuButton
             onClick={() => {
               setCurrentTab(2);
+              router.push("/upcomingMeetings");
             }}
           >
             Upcoming Meetings

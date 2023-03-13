@@ -4,13 +4,13 @@ import { useAddUserRate } from "~/hooks/user";
 
 const RegisterPage: NextPage = () => {
   const [rate, setRate] = useState<number>(0);
-  const addUserRoute = useAddUserRate();
+  const addUserRate = useAddUserRate();
 
   const handleSubmit = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
     e.preventDefault();
-    addUserRoute(rate);
+    addUserRate(rate);
   };
 
   return (
@@ -36,7 +36,9 @@ const RegisterPage: NextPage = () => {
             type="submit"
             className="rounded-sm bg-blue-600 text-white shadow-md transition-colors hover:bg-blue-500"
             form="rateForm"
-            onClick={handleSubmit}
+            onClick={(e) => {
+              handleSubmit(e);
+            }}
           >
             Let's Go
           </button>

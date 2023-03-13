@@ -20,9 +20,6 @@ const ProfileMenu: FC = () => (
     <ProfileLink colorClass="text-red-500" onClick={signOut}>
       logout
     </ProfileLink>
-    <ProfileLink colorClass="text-red-500" onClick={signOut}>
-      logout
-    </ProfileLink>
   </ul>
 );
 

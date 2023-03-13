@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { prisma } from "~/server/db";
 
 export const meetingRouter = createTRPCRouter({
   create: protectedProcedure
@@ -13,8 +12,8 @@ export const meetingRouter = createTRPCRouter({
         duration: z.enum(["15", "30"]),
       })
     )
-    .mutation((req) => {
-      prisma.meeting.create({
+    .mutation(async (req) => {
+      return await req.ctx.prisma.meeting.create({
         data: {
           title: req.input.title,
           description: req.input.description,

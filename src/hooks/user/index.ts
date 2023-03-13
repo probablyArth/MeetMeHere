@@ -3,8 +3,8 @@ import { api } from "~/utils/api";
 
 export const useDeleteUser = () => {
   const router = useRouter();
-  const deleteUser = api.user.delete.useMutation();
 
+  const deleteUser = api.user.delete.useMutation();
   return () => {
     deleteUser.mutate();
     router.reload();
@@ -13,10 +13,13 @@ export const useDeleteUser = () => {
 
 export const useAddUserRate = () => {
   const router = useRouter();
-  const addUserRate = api.user.addRate.useMutation();
+  const addUserRate = api.user.addRate.useMutation({
+    onSuccess: () => {
+      router.push("/dashboard");
+    },
+  });
 
   return (rate: number) => {
     addUserRate.mutate(rate);
-    router.reload();
   };
 };

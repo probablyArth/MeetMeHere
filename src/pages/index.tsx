@@ -1,13 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession, getSession } from "next-auth/react";
-import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const session = getSession();
-
   return (
     <>
       <Head>
@@ -16,9 +12,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col items-center gap-2">
-        <p className="text-2xl text-black">
-          {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-        </p>
         <AuthShowcase />
       </div>
     </>
@@ -30,15 +23,10 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   let { data: sessionData } = useSession();
   const router = useRouter();
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
   return (
     <>
       <p className="text-center text-2xl text-black">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
       </p>
       {sessionData && (
         <button

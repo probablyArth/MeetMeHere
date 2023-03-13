@@ -5,7 +5,7 @@ export const useCreateMeeting = () => {
   const router = useRouter();
   const createMeeting = api.meeting.create.useMutation();
 
-  return (data: {
+  return async (data: {
     invitees: string[];
     title: string;
     description: string;
@@ -13,6 +13,5 @@ export const useCreateMeeting = () => {
     duration: "15" | "30";
   }) => {
     createMeeting.mutate(data);
-    router.reload();
   };
 };

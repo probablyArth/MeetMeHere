@@ -5,10 +5,14 @@ import { useRouter } from "next/router";
 const AuthWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   const { data, status } = useSession();
   const router = useRouter();
-  console.table({ data, status });
+
   useEffect(() => {
     if (data !== undefined) {
       if (status === "authenticated") {
+        if (router.pathname === "/") {
+          router.push("/dashboard");
+          return;
+        }
         if (typeof data.user.rate === "number") {
           if (router.pathname === "/register") {
             router.push("/dashboard");
@@ -20,8 +24,10 @@ const AuthWrapper: FC<{ children: ReactNode }> = ({ children }) => {
             return;
           }
         }
-      } else if (status === "unauthenticated" && router.pathname !== "/") {
+      }
+      if (status === "unauthenticated" && router.pathname !== "/") {
         router.push("/");
+        return;
       }
     }
   }, [router.pathname, data]);

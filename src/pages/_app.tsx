@@ -6,8 +6,9 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import AuthWrapper from "~/components/AuthWrapper";
-import Layout from "~/components/layout";
+import Layout from "~/components/Layouts/layout";
 import { MantineProvider } from "@mantine/core";
+import AppShell from "~/components/Layouts/AppShell";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,9 +18,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <MantineProvider>
         <Layout>
-          <AuthWrapper>
-            <Component {...pageProps} />
-          </AuthWrapper>
+          <AppShell>
+            <AuthWrapper>
+              <Component {...pageProps} />
+            </AuthWrapper>
+          </AppShell>
         </Layout>
       </MantineProvider>
     </SessionProvider>

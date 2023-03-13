@@ -4,8 +4,11 @@ import { useForm } from "@mantine/form";
 import dayjs from "dayjs";
 import { FC } from "react";
 import Button from "~/components/Common/Button";
+import { useCreateMeeting } from "~/hooks/meeting";
 
 const NewMeetingModal: FC<ModalProps> = (props) => {
+  const createMeeting = useCreateMeeting();
+
   const form = useForm<{
     title: string;
     description: string;
@@ -30,8 +33,15 @@ const NewMeetingModal: FC<ModalProps> = (props) => {
   return (
     <Modal {...props} centered title="Create a new meeting">
       <form
-        onSubmit={form.onSubmit((e) => {
-          console.log(e);
+        onSubmit={form.onSubmit(async (e) => {
+          console.log("here");
+          createMeeting({
+            dateTime: dayjs(e.dateTime).toDate(),
+            title: e.title,
+            description: e.description,
+            duration: e.duration,
+            invitees: [],
+          });
         })}
         className="flex flex-col gap-4"
       >
