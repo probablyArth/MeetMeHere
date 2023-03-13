@@ -3,8 +3,8 @@ import { api } from "~/utils/api";
 
 export const useDeleteUser = () => {
   const router = useRouter();
-
   const deleteUser = api.user.delete.useMutation();
+
   return () => {
     deleteUser.mutate();
     router.reload();

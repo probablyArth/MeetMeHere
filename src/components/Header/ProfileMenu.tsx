@@ -9,14 +9,14 @@ const ProfileLink: FC<{
   <li>
     <button
       onClick={onClick}
-      className={`z-20000 duration-400 p-4 transition-colors hover:bg-slate-100 ${colorClass}`}
+      className={`duration-400 p-4 transition-colors hover:bg-slate-100 ${colorClass}`}
     >
       {children}
     </button>
   </li>
 );
 const ProfileMenu: FC = () => (
-  <ul className="z-200000 absolute flex flex-col items-center divide-y rounded-md bg-white shadow-md">
+  <ul className=" absolute flex flex-col items-center divide-y rounded-md bg-white shadow-md">
     <ProfileLink colorClass="text-red-500" onClick={signOut}>
       logout
     </ProfileLink>

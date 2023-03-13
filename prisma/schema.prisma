@@ -51,15 +51,21 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  meetings Meeting[]
   rate          Int?
 }
 
 model Meeting {
   id String @id @default(cuid())
+  creatorId String
+  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   title String
   description String
-  duration DateTime
+  dateTime DateTime
+  duration String
   invitees Invitee[]
+
+  @@index([creatorId])
 }
 
 model Invitee {
