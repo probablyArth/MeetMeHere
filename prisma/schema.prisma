@@ -51,33 +51,45 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  meetings Meeting[]
+  created Creator[]
+  invited Invitee[]
   rate          Int?
 }
 
 model Meeting {
   id String @id @default(cuid())
-  creatorId String
-  creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  
   title String
   description String
   dateTime DateTime
   duration String
   invitees Invitee[]
-
-  @@index([creatorId])
+  creator Creator?
+  
 }
+model Creator {
+  id String @id @default(cuid())
 
+  meetingId String @unique
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  @@index([meetingId])
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
 model Invitee {
   id String @id @default(cuid())
-  meetingId String
-  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
-  gmail String
   accepted Boolean @default(false)
 
+  meetingId String
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   @@index([meetingId])
-}
 
+  gmail String
+  user User @relation(fields: [gmail], references: [email], onDelete: Cascade)
+  @@index([gmail])
+}
 model VerificationToken {
   identifier String
   token      String   @unique

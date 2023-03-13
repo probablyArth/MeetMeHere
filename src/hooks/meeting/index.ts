@@ -30,3 +30,10 @@ export const useCreateMeeting = (closeModal: () => void) => {
     createMeeting.mutate(data);
   };
 };
+
+export const useGetUpcomingMeetings = () => {
+  const getUpcomingMeetings = api.meeting.getUpcoming.useQuery();
+  return async () => {
+    return getUpcomingMeetings.data;
+  };
+};

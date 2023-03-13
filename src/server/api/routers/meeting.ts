@@ -19,7 +19,11 @@ export const meetingRouter = createTRPCRouter({
           description: req.input.description,
           duration: req.input.duration,
           dateTime: req.input.dateTime,
-          creatorId: req.ctx.session.user.id,
+          creator: {
+            create: {
+              userId: req.ctx.session.user.id,
+            },
+          },
           invitees: {
             createMany: {
               data: req.input.invitees.map((gmail) => {
@@ -35,20 +39,32 @@ export const meetingRouter = createTRPCRouter({
       where: {
         OR: [
           {
-            creatorId: req.ctx.session.user.id,
+            creator: {
+              userId: req.ctx.session.user.id,
+            },
           },
           {
             invitees: {
               some: {
-                gmail: req.ctx.session.user.email as string,
+                user: {
+                  id: req.ctx.session.user.id,
+                },
               },
             },
           },
         ],
       },
       include: {
-        creator: true,
-        invitees: true,
+        creator: {
+          include: {
+            user: true,
+          },
+        },
+        invitees: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
   }),
