@@ -30,4 +30,26 @@ export const meetingRouter = createTRPCRouter({
         },
       });
     }),
+  getUpcoming: protectedProcedure.query(async (req) => {
+    return req.ctx.prisma.meeting.findMany({
+      where: {
+        OR: [
+          {
+            creatorId: req.ctx.session.user.id,
+          },
+          {
+            invitees: {
+              some: {
+                gmail: req.ctx.session.user.email as string,
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        creator: true,
+        invitees: true,
+      },
+    });
+  }),
 });

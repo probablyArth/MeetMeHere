@@ -73,7 +73,8 @@ model Invitee {
   meetingId String
   meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   gmail String
-  
+  accepted Boolean @default(false)
+
   @@index([meetingId])
 }
 
