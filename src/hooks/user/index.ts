@@ -15,7 +15,7 @@ export const useAddUserRate = () => {
   const router = useRouter();
   const addUserRate = api.user.addRate.useMutation({
     onSuccess: () => {
-      router.push("/dashboard");
+      router.reload();
     },
   });
 

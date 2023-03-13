@@ -6,9 +6,10 @@ import { FC } from "react";
 import Button from "~/components/Common/Button";
 import { useCreateMeeting } from "~/hooks/meeting";
 
-const NewMeetingModal: FC<ModalProps> = (props) => {
-  const createMeeting = useCreateMeeting();
-
+const NewMeetingModal: FC<ModalProps & { closeModal: () => void }> = (
+  props
+) => {
+  const createMeeting = useCreateMeeting(props.closeModal);
   const form = useForm<{
     title: string;
     description: string;

@@ -8,7 +8,6 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { api } from "~/utils/api";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -42,9 +41,6 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   debug: true,
-  events: {
-    createUser: async (message) => {},
-  },
   pages: {
     newUser: "/register",
   },

@@ -13,6 +13,7 @@ const Dashboard: NextPage = () => {
       <NewMeetingModal
         opened={opened}
         onClose={handler.close}
+        closeModal={handler.close}
       ></NewMeetingModal>
     </>
   );

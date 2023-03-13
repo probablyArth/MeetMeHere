@@ -1,9 +1,24 @@
-import { useRouter } from "next/router";
+import { notifications } from "@mantine/notifications";
 import { api } from "~/utils/api";
 
-export const useCreateMeeting = () => {
-  const router = useRouter();
-  const createMeeting = api.meeting.create.useMutation();
+export const useCreateMeeting = (closeModal: () => void) => {
+  const createMeeting = api.meeting.create.useMutation({
+    onSuccess: () => {
+      closeModal();
+      notifications.show({
+        title: "Success",
+        color: "green",
+        message: "successfully created a meeting dawg",
+      });
+    },
+    onError: () => {
+      notifications.show({
+        title: "Error!",
+        color: "red",
+        message: "An error occurred while creating a new meeting :(",
+      });
+    },
+  });
 
   return async (data: {
     invitees: string[];
