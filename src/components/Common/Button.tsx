@@ -1,11 +1,10 @@
-import { FC, ReactNode } from "react";
+import { FC, HTMLProps, ReactNode } from "react";
 
-const Button: FC<{
-  style: "inverted" | "normal";
-  children: ReactNode;
-  onClick?: () => void;
-  className?: string;
-}> = ({ style, children, onClick, className }) => {
+const Button: FC<
+  {
+    style: "inverted" | "normal";
+  } & HTMLProps<HTMLButtonElement>
+> = ({ style, children, onClick, className, type }) => {
   return (
     <button
       className={

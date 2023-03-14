@@ -26,4 +26,16 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+  existsBygmail: protectedProcedure.input(z.string()).query((req) => {
+    return req.ctx.prisma.user
+      .findUnique({
+        where: { email: req.input },
+      })
+      .then((user) => {
+        if (user === null) {
+          return false;
+        }
+        return true;
+      });
+  }),
 });

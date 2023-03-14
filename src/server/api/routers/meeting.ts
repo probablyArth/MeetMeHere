@@ -1,3 +1,5 @@
+import { contextProps } from "@trpc/react-query/shared";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -65,6 +67,33 @@ export const meetingRouter = createTRPCRouter({
             user: true,
           },
         },
+      },
+    });
+  }),
+  delete: protectedProcedure.input(z.string()).mutation(async (req) => {
+    const meeting = await req.ctx.prisma.meeting.findUnique({
+      where: {
+        id: req.input,
+      },
+      include: {
+        creator: true,
+      },
+    });
+    if (!meeting) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "meeting not found",
+      });
+    }
+    if (req.ctx.session.user.id !== meeting.creator?.userId) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "User is not the creator of this meeting",
+      });
+    }
+    await req.ctx.prisma.meeting.delete({
+      where: {
+        id: req.input,
       },
     });
   }),

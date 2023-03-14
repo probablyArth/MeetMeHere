@@ -20,11 +20,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <MantineProvider>
         <Notifications />
         <Layout>
-          <AppShell>
-            <AuthWrapper>
+          <AuthWrapper>
+            <AppShell>
               <Component {...pageProps} />
-            </AuthWrapper>
-          </AppShell>
+            </AppShell>
+          </AuthWrapper>
         </Layout>
       </MantineProvider>
     </SessionProvider>
