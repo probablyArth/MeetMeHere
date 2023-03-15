@@ -1,7 +1,7 @@
 import { Creator, Invitee, Meeting, User } from "@prisma/client";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { api } from "~/utils/api";
 import { AiFillDelete } from "react-icons/ai";
 import { LoadingOverlay } from "@mantine/core";
