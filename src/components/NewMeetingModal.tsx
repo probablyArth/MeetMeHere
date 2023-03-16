@@ -15,7 +15,7 @@ const Invitees = (
   setInvitees: Dispatch<SetStateAction<string[]>>
 ) => {
   return (
-    <div className="flex">
+    <div className="flex gap-2">
       {invitees.map((invitee, key) => {
         return (
           <div

@@ -16,7 +16,7 @@ const ProfileLink: FC<{
   </li>
 );
 const ProfileMenu: FC = () => (
-  <ul className=" absolute flex flex-col items-center divide-y rounded-md bg-white shadow-md">
+  <ul className=" absolute z-50 flex flex-col items-center divide-y rounded-md bg-white shadow-md">
     <ProfileLink colorClass="text-red-500" onClick={signOut}>
       logout
     </ProfileLink>
