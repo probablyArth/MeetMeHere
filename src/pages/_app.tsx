@@ -10,11 +10,15 @@ import Layout from "~/components/Layouts/layout";
 import { MantineProvider } from "@mantine/core";
 import AppShell from "~/components/Layouts/AppShell";
 import { Notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
+import { HMSRoomProvider } from "@100mslive/react-sdk";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
+  console.log(router.pathname);
   return (
     <SessionProvider session={session}>
       <MantineProvider>
@@ -22,7 +26,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Layout>
           <AuthWrapper>
             <AppShell>
-              <Component {...pageProps} />
+              {router.pathname === "/meet/[id]" ? (
+                <HMSRoomProvider>
+                  <Component {...pageProps} />
+                </HMSRoomProvider>
+              ) : (
+                <Component {...pageProps} />
+              )}
             </AppShell>
           </AuthWrapper>
         </Layout>

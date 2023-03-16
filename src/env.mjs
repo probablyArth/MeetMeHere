@@ -20,6 +20,10 @@ const server = z.object({
   ),
   GOOGLE_CLIENT_ID: z.string().min(1),
   GOOGLE_CLIENT_SECRET: z.string().min(1),
+  HMS_TEMPLATE_ID: z.string().min(1),
+  HMS_ACCESS_KEY: z.string().min(1),
+  HMS_SECRET: z.string().min(1),
+  NEXT_PUBLIC_TOKEN_ENDPOINT: z.string().min(1),
 });
 
 /**
@@ -43,6 +47,10 @@ const processEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  HMS_TEMPLATE_ID: process.env.HMS_TEMPLATE_ID,
+  HMS_ACCESS_KEY: process.env.HMS_ACCESS_KEY,
+  HMS_SECRET: process.env.HMS_SECRET,
+  NEXT_PUBLIC_TOKEN_ENDPOINT: process.env.NEXT_PUBLIC_TOKEN_ENDPOINT,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

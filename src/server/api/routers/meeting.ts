@@ -1,6 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createId } from "@paralleldrive/cuid2";
+
+import HMSroomService from "../services/HMS";
 
 export const meetingRouter = createTRPCRouter({
   create: protectedProcedure
@@ -14,12 +17,19 @@ export const meetingRouter = createTRPCRouter({
       })
     )
     .mutation(async (req) => {
-      return await req.ctx.prisma.meeting.create({
+      const meetingId = createId();
+      const { id: roomId } = await HMSroomService.create(
+        meetingId,
+        req.input.description
+      );
+      return req.ctx.prisma.meeting.create({
         data: {
-          title: req.input.title,
+          id: meetingId,
+          roomId,
+          dateTime: req.input.dateTime,
           description: req.input.description,
           duration: req.input.duration,
-          dateTime: req.input.dateTime,
+          title: req.input.title,
           creator: {
             create: {
               userId: req.ctx.session.user.id,
@@ -32,6 +42,15 @@ export const meetingRouter = createTRPCRouter({
               }),
             },
           },
+        },
+      });
+    }),
+  getByID: protectedProcedure
+    .input(z.object({ meetingId: z.string() }))
+    .query(async (req) => {
+      return req.ctx.prisma.meeting.findUnique({
+        where: {
+          id: req.input.meetingId,
         },
       });
     }),
@@ -57,6 +76,7 @@ export const meetingRouter = createTRPCRouter({
             },
           },
         ],
+        status: { not: "ended" },
       },
       include: {
         creator: {
@@ -93,6 +113,7 @@ export const meetingRouter = createTRPCRouter({
         message: "User is not the creator of this meeting",
       });
     }
+    await HMSroomService.disable(meeting.roomId);
     await req.ctx.prisma.meeting.delete({
       where: {
         id: req.input,

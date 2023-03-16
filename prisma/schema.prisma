@@ -58,14 +58,14 @@ model User {
 
 model Meeting {
   id String @id @default(cuid())
-  
+  roomId String @db.Text
+  status MeetingStatus @default(upcoming)
   title String
   description String @db.Text
   dateTime DateTime
   duration String
   invitees Invitee[]
   creator Creator?
-  
 }
 model Creator {
   id String @id @default(cuid())
@@ -84,6 +84,13 @@ enum InviteeStatus {
   rejected
   neutral
 }
+
+enum MeetingStatus {
+  upcoming
+  ongoing
+  ended
+}
+
 model Invitee {
   id String @id @default(cuid())
   status InviteeStatus @default(neutral)
