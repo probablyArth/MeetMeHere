@@ -63,15 +63,73 @@ const UpcomingMeetingCard: FC<{
 }> = ({ meeting }) => {
   const context = api.useContext();
   const session = useSession();
+  const [loading, setLoading] = useState<boolean>(false);
   const deleteMeeting = api.meeting.delete.useMutation({
-    onSuccess: () => context.meeting.invalidate(),
+    onSuccess: () => {
+      context.meeting.invalidate().then(() => {
+        setLoading(false);
+      });
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
   });
   const updateInviteeStatus = api.meeting.updateInviteeStatus.useMutation({
-    onSuccess: () => context.meeting.invalidate(),
+    onSuccess: () => {
+      context.meeting.invalidate().then(() => {
+        setLoading(false);
+      });
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
   });
-  const [upcominTimeString, setUpcomingTimeString] = useState(
+  const [upcomingTimeString, setUpcomingTimeString] = useState(
     evaluateUpcomingTimeString(meeting.dateTime)
   );
+
+  const InviteeStatus: FC<{ data: Invitee }> = ({ data }) => {
+    if (data.status === "neutral") {
+      return (
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              updateInviteeStatus.mutate({
+                newStatus: "accepted",
+                inviteeId: data.id,
+              });
+            }}
+            className="rounded-md bg-green-500 px-3 py-1 text-green-900 shadow-md"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => {
+              updateInviteeStatus.mutate({
+                newStatus: "rejected",
+                inviteeId: data.id,
+              });
+            }}
+            className="rounded-md bg-red-500 px-3 py-1 text-red-900 shadow-md"
+          >
+            Decline
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex">
+        <div
+          className={`rouned-sm flex items-center justify-center bg-${
+            data.status === "accepted" ? "green" : "red"
+          }-500 p-2 text-white`}
+        >
+          {data.status.toUpperCase()}
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     setInterval(() => {
@@ -82,12 +140,12 @@ const UpcomingMeetingCard: FC<{
   return (
     <>
       <div className="relative flex min-h-[200px] w-full flex-col rounded-md p-5 shadow-md">
-        <LoadingOverlay visible={deleteMeeting.isLoading} overlayBlur={2} />
+        <LoadingOverlay visible={loading} overlayBlur={2} />
         <div className="flex w-full justify-between gap-2">
           <div className="flex flex-col items-start justify-start text-left">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-semibold">{meeting.title}</h1>
-              <Tooltip label={upcominTimeString}>
+              <Tooltip label={upcomingTimeString}>
                 <Mark color="blue">
                   {meeting.dateTime.toDateString()} @{" "}
                   {meeting.dateTime.getHours()}:{meeting.dateTime.getMinutes()}
@@ -99,7 +157,7 @@ const UpcomingMeetingCard: FC<{
               <h3>{meeting.description}</h3>
             </Spoiler>
           </div>
-          {session.data?.user.id === meeting.creator?.userId && (
+          {session.data?.user.id === meeting.creator?.userId ? (
             <button
               onClick={() => {
                 deleteMeeting.mutate(meeting.id);
@@ -108,6 +166,16 @@ const UpcomingMeetingCard: FC<{
             >
               <AiFillDelete size={24} /> <h1>Delete Meeting</h1>
             </button>
+          ) : (
+            <InviteeStatus
+              data={
+                meeting.invitees.find(
+                  (value) =>
+                    session.data !== null &&
+                    session.data.user.id === value.user.id
+                ) as Invitee
+              }
+            />
           )}
         </div>
         <div className="flex justify-between p-4">

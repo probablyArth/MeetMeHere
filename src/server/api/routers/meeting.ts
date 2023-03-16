@@ -50,6 +50,9 @@ export const meetingRouter = createTRPCRouter({
                 user: {
                   id: req.ctx.session.user.id,
                 },
+                status: {
+                  not: "rejected",
+                },
               },
             },
           },
