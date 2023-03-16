@@ -6,7 +6,7 @@ const Header: FC = () => {
   const { data } = useSession();
   const [profileMenuClicked, setProfileMenuClicked] = useState<boolean>(false);
   return (
-    <div className="sticky top-2 z-50 m-2 flex max-h-[20vw] w-[95%] items-center justify-between rounded-md p-4 shadow-md">
+    <div className="flex h-[80px] w-full items-center justify-between rounded-md p-4 shadow-md md:h-[120px]">
       <h1>MeetMeHere</h1>
       <div className="relative">
         <button
@@ -20,7 +20,7 @@ const Header: FC = () => {
           <img
             src={data?.user.image as string}
             className="w-[64px] rounded-full border-2 border-zinc-900"
-            alt=""
+            alt={data?.user.name as string}
           />
         </button>
         {profileMenuClicked && <ProfileMenu />}

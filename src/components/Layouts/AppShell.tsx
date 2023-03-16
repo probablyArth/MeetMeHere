@@ -4,10 +4,7 @@ import SideMenu from "../SideMenu";
 import { useSession } from "next-auth/react";
 import { Router, useRouter } from "next/router";
 
-export type tab = 0 | 1 | 2;
-
 const AppShell: FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentTab, setCurrentTab] = useState<tab>(0);
   const { data } = useSession();
   const { pathname } = useRouter();
   if (
@@ -15,11 +12,11 @@ const AppShell: FC<{ children: ReactNode }> = ({ children }) => {
     ["/dashboard", "/previousMeetings", "/upcomingMeetings"].includes(pathname)
   ) {
     return (
-      <main className="relative flex h-screen w-screen flex-col items-center justify-center overflow-x-hidden">
+      <main className="relative flex h-screen w-screen flex-col gap-[20px] overflow-hidden p-[20px]">
         <Header />
-        <div className="relative flex h-full w-full gap-4 p-4">
-          <SideMenu setCurrentTab={setCurrentTab} />
-          <div className="flex h-full w-full flex-col items-center rounded-md px-2 shadow-md">
+        <div className="relative flex h-[calc(100vh-140px)] w-full gap-4 md:h-[calc(100vh-180px)]">
+          <SideMenu />
+          <div className="scrollbar flex h-full w-full flex-col items-center overflow-y-scroll rounded-md px-2 shadow-md">
             {children}
           </div>
         </div>

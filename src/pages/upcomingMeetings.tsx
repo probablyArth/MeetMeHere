@@ -4,7 +4,26 @@ import { useSession } from "next-auth/react";
 import { FC } from "react";
 import { api } from "~/utils/api";
 import { AiFillDelete } from "react-icons/ai";
-import { LoadingOverlay } from "@mantine/core";
+import { Button, LoadingOverlay } from "@mantine/core";
+import Link from "next/link";
+
+const MeetingsSkeleton: FC = () => {
+  return (
+    <div className="z-[-1] flex h-[250px] w-full flex-col justify-center gap-[50px] rounded-md p-8 shadow-sm">
+      <div className="flex animate-pulse flex-col gap-2">
+        <div className="h-[30px] w-[80%] rounded-sm bg-slate-100"></div>
+        <div className="h-[25px] w-[60%] rounded-sm bg-slate-100"></div>
+      </div>
+      <div className="flex w-full  animate-pulse justify-between">
+        <div className="h-[64px] w-[64px] rounded-full bg-slate-100"></div>
+        <div className="flex">
+          <div className="h-[64px] w-[64px] rounded-full bg-slate-200"></div>
+          <div className="ml-[-20px] h-[64px] w-[64px] rounded-full bg-slate-100"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const UpcomingMeetingCard: FC<{
   meeting: Meeting & {
@@ -71,11 +90,36 @@ const UpcomingMeetingCard: FC<{
 
 const UpcomingMeetings: NextPage = () => {
   const upcomingMeetings = api.meeting.getUpcoming.useQuery();
+
   if (upcomingMeetings.status === "loading") {
-    return <h1>Loading</h1>;
+    return (
+      <>
+        <MeetingsSkeleton />
+        <MeetingsSkeleton />
+        <MeetingsSkeleton />
+        <MeetingsSkeleton />
+        <MeetingsSkeleton />
+      </>
+    );
   }
   if (upcomingMeetings.status === "error") {
     return <h1>An Error Occurred</h1>;
+  }
+  if (
+    upcomingMeetings.status === "success" &&
+    upcomingMeetings.data.length === 0
+  ) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center">
+        <h1>Looks like you don't have anything to look forward to!</h1>
+        <Link
+          href={"/dashboard"}
+          className="rounded-md text-blue-900 underline hover:opacity-70"
+        >
+          Create a meeting
+        </Link>
+      </div>
+    );
   }
   return (
     <>

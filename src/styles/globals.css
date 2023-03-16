@@ -14,3 +14,24 @@
 * {
   box-sizing: border-box;
 }
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: white;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(232, 232, 232);
+    border-radius: 100vh;
+    border: 3px solid #f2f3ea;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #bababa;
+  }
+}
