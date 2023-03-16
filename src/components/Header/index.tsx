@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import ProfileMenu from "./ProfileMenu";
+import Image from "next/image";
 
 const Header: FC = () => {
   const { data } = useSession();
@@ -17,10 +18,12 @@ const Header: FC = () => {
             setProfileMenuClicked((clicked) => !clicked);
           }}
         >
-          <img
+          <Image
             src={data?.user.image as string}
-            className="w-[64px] rounded-full border-2 border-zinc-900"
+            className="rounded-full border-2 border-zinc-900"
             alt={data?.user.name as string}
+            width={64}
+            height={64}
           />
         </button>
         {profileMenuClicked && <ProfileMenu />}

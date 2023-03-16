@@ -1,4 +1,3 @@
-import { contextProps } from "@trpc/react-query/shared";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
@@ -97,4 +96,36 @@ export const meetingRouter = createTRPCRouter({
       },
     });
   }),
+
+  updateInviteeStatus: protectedProcedure
+    .input(
+      z.object({
+        inviteeId: z.string(),
+        newStatus: z.enum(["accepted", "rejected"]),
+      })
+    )
+    .mutation(async (req) => {
+      const invitee = req.ctx.prisma.invitee.findFirst({
+        where: {
+          id: req.input.inviteeId,
+          user: {
+            id: req.ctx.session.user.id,
+          },
+        },
+      });
+      if (!invitee) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "invitee not found",
+        });
+      }
+      await req.ctx.prisma.invitee.update({
+        where: {
+          id: req.input.inviteeId,
+        },
+        data: {
+          status: req.input.newStatus,
+        },
+      });
+    }),
 });

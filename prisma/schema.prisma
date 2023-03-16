@@ -60,7 +60,7 @@ model Meeting {
   id String @id @default(cuid())
   
   title String
-  description String
+  description String @db.Text
   dateTime DateTime
   duration String
   invitees Invitee[]
@@ -78,10 +78,16 @@ model Creator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([userId])
 }
+
+enum InviteeStatus {
+  accepted
+  rejected
+  neutral
+}
 model Invitee {
   id String @id @default(cuid())
-  accepted Boolean @default(false)
-
+  status InviteeStatus @default(neutral)
+  
   meetingId String
   meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   @@index([meetingId])
