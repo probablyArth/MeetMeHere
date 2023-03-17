@@ -9,6 +9,7 @@ import { Creator, Invitee, Meeting, User } from "@prisma/client";
 import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { api } from "~/utils/api";
@@ -178,7 +179,7 @@ const UpcomingMeetingCard: FC<{
             />
           )}
         </div>
-        <div className="flex justify-between p-4">
+        <div className="flex items-center justify-between p-4">
           <div className="flex flex-col items-center">
             <h1>creator</h1>
             <Tooltip label={meeting.creator?.user.name as string}>
@@ -191,6 +192,12 @@ const UpcomingMeetingCard: FC<{
               />
             </Tooltip>
           </div>
+          <Link
+            href={`/meet/${meeting.id}`}
+            className="rounded-md bg-orange-400 p-4 font-semibold text-white shadow-md hover:opacity-70"
+          >
+            Go to meeting page
+          </Link>
           <div>
             <h1>Invitees</h1>
             <div className="flex items-center justify-center gap-2">

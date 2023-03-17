@@ -6,9 +6,12 @@ const MeetPageSkeleton = () => {
   return <h1>Loading</h1>;
 };
 
+const getAuthToken = () => {};
+
 const MeetPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const data = api.meeting.getByID.useQuery({
     meetingId: router.query.id as string,
   });

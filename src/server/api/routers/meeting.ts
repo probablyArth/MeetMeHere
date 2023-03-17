@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { createId } from "@paralleldrive/cuid2";
 
-import HMSroomService from "../services/HMS";
+import HMSroomService, { HMSResponse, ROLE } from "../services/HMS";
 
 export const meetingRouter = createTRPCRouter({
   create: protectedProcedure
@@ -18,10 +18,9 @@ export const meetingRouter = createTRPCRouter({
     )
     .mutation(async (req) => {
       const meetingId = createId();
-      const { id: roomId } = await HMSroomService.create(
-        meetingId,
-        req.input.description
-      );
+      const {
+        data: { id: roomId },
+      } = await HMSroomService.create(meetingId, req.input.description);
       return req.ctx.prisma.meeting.create({
         data: {
           id: meetingId,
@@ -151,5 +150,61 @@ export const meetingRouter = createTRPCRouter({
           status: req.input.newStatus,
         },
       });
+    }),
+
+  getAuthToken: protectedProcedure
+    .input(z.object({ meeting_id: z.string() }))
+    .query(async (req) => {
+      const meeting = await req.ctx.prisma.meeting.findFirst({
+        where: {
+          OR: [
+            {
+              creator: {
+                userId: req.ctx.session.user.id,
+              },
+            },
+            {
+              invitees: {
+                some: {
+                  user: {
+                    id: req.ctx.session.user.id,
+                  },
+                  status: {
+                    not: "rejected",
+                  },
+                },
+              },
+            },
+          ],
+          status: "ongoing",
+          id: req.input.meeting_id,
+        },
+        include: {
+          creator: {
+            include: {
+              user: true,
+            },
+          },
+          invitees: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      });
+      if (!meeting) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Meeting not found!",
+        });
+      }
+      let role: ROLE = ROLE.invitee;
+      if (meeting.creator?.userId === req.ctx.session.user.id)
+        role = ROLE.creator;
+      return HMSroomService.generateAuthToken(
+        meeting.roomId as string,
+        req.ctx.session.user.id,
+        role
+      );
     }),
 });
