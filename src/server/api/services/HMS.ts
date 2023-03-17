@@ -38,7 +38,7 @@ const generateManagementToken = () => {
       "An error occured while generating management token for server: \n",
       e
     );
-    process.exit(1);
+    // process.exit(1);
   }
 };
 
